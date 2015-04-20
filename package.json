@@ -24,9 +24,10 @@
   },
   "homepage": "https://github.com/xaviervia/kiel",
   "devDependencies": {
-    "washington": "^0.11.2"
+    "washington": "0.11.2"
   },
   "dependencies": {
-    "sydney": "^0.1.1"
+    "object-pattern": "0.3.0",
+    "sydney": "0.2.0"
   }
 }
