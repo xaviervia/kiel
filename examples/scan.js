@@ -24,7 +24,7 @@ example("GET/scan/localhost/7070 connects to the given port", function (done) {
 
 example("GET/scan/localhost/7070 puts when it is found", function (done) {
   var kiel = new Kiel
-  
+
   kiel.add(
     OP.parse({
       method: "PUT",
@@ -40,4 +40,19 @@ example("GET/scan/localhost/7070 puts when it is found", function (done) {
   server.listen(7070, function () {
     kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
   })
+})
+
+
+example("GET/scan/localhost/7070 deletes when nothing found", function (done) {
+  var kiel = new Kiel
+
+  kiel.add(
+    OP.parse({
+      method: "DELETE",
+      resource: ["scan", "localhost", 7070]
+    }),
+    function () { done() }
+  )
+
+  kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
 })

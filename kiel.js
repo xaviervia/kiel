@@ -7,8 +7,4 @@ var Kiel = function () {
 
 Kiel.prototype = Object.create(Sydney.prototype)
 
-Kiel.prototype.callback = function (event, venue) {
-  this.broadcast(event)
-}
-
 module.exports = Kiel

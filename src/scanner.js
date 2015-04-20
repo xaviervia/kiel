@@ -21,8 +21,15 @@ Scanner.prototype.callback = function (event, venue) {
   var host = event.resource[1]
 
   this.socket = net.connect(port, host, function () {
-    venue.send({
+    venue.broadcast({
       method: "PUT",
+      resource: ["scan", host, port]
+    })
+  })
+
+  this.socket.on("error", function () {
+    venue.broadcast({
+      method: "DELETE",
       resource: ["scan", host, port]
     })
   })
