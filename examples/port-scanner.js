@@ -1,15 +1,14 @@
 "use strict"
 
 
-var example = require("washington")
-var net     = require("net")
-var Sydney  = require("sydney")
-var OP      = require("object-pattern")
-var Kiel    = require("../kiel")
+var example     = require("washington")
+var net         = require("net")
+var OP          = require("object-pattern")
+var PortScanner = require("../src/port-scanner")
 
 
 example("GET/scan/localhost/7070 connects to the given port", function (done) {
-  var kiel = new Kiel
+  var portScanner = new PortScanner
 
   var server = net.createServer(function () {
     server.close()
@@ -17,15 +16,15 @@ example("GET/scan/localhost/7070 connects to the given port", function (done) {
   })
 
   server.listen(7070, function () {
-    kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
+    portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
   })
 })
 
 
 example("GET/scan/localhost/7070 puts when it is found", function (done) {
-  var kiel = new Kiel
+  var portScanner = new PortScanner
 
-  kiel.add(
+  portScanner.add(
     OP.parse({
       method: "PUT",
       resource: ["scan", "localhost", 7070]
@@ -38,15 +37,15 @@ example("GET/scan/localhost/7070 puts when it is found", function (done) {
   })
 
   server.listen(7070, function () {
-    kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
+    portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
   })
 })
 
 
 example("GET/scan/localhost/7070 deletes when nothing found", function (done) {
-  var kiel = new Kiel
+  var portScanner = new PortScanner
 
-  kiel.add(
+  portScanner.add(
     OP.parse({
       method: "DELETE",
       resource: ["scan", "localhost", 7070]
@@ -54,19 +53,5 @@ example("GET/scan/localhost/7070 deletes when nothing found", function (done) {
     function () { done() }
   )
 
-  kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
-})
-
-
-example("GET/scan/localhost calls port 1", function (done) {
-  var kiel = new Kiel
-
-  var server = net.createServer(function () {
-    server.close()
-    done()
-  })
-
-  server.listen(1, function () {
-    kiel.send({method: "GET", resource: ["scan", "localhost"]})
-  })
+  portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
 })
