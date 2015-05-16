@@ -34,7 +34,6 @@ var example = require("washington")
 var os      = require("os")
 var OP      = require("object-pattern")
 var Sydney  = require("sydney")
-var Logger  = require("@jstp/logger")
 
 
 var InterfaceScanner = function () {}
