@@ -1,1 +1,2 @@
-require("./scan")
+require("./port-scanner")
+require("./host-scanner")
