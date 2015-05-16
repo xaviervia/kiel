@@ -1,6 +1,8 @@
 Kiel
 ====
 
+[ ![Codeship Status for xaviervia/kiel](https://codeship.com/projects/9a430a70-de54-0132-dcb9-72308c200ea3/status?branch=master)](https://codeship.com/projects/80393)
+
 Eager network / port / service scanner for Node.js
 
 Installation
