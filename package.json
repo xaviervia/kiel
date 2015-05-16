@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/xaviervia/kiel",
   "devDependencies": {
+    "@jstp/logger": "0.0.1",
     "washington": "0.11.2"
   },
   "dependencies": {
