@@ -1,22 +1,21 @@
+"use strict"
+
+
 var Sydney = require("sydney")
 var OP     = require("object-pattern")
 var net    = require("net")
 
-var Scanner = function () {
-  this.endpoint = OP.parse({
-    method: "GET",
-    resource: ["scan", "*", "*"]
-  })
-}
 
-Scanner.prototype = Object.create(Sydney.prototype)
+var PortScanner = function () {}
 
-Scanner.prototype.endpoint = OP.parse({
+PortScanner.prototype = Object.create(Sydney.prototype)
+
+PortScanner.prototype.endpoint = OP.parse({
   method: "GET",
   resource: ["scan", "*", "*"]
 })
 
-Scanner.prototype.callback = function (event, venue) {
+PortScanner.prototype.callback = function (event, venue) {
   var port = parseInt(event.resource[2], 10)
   var host = event.resource[1]
 
@@ -35,4 +34,5 @@ Scanner.prototype.callback = function (event, venue) {
   })
 }
 
-module.exports = Scanner
+
+module.exports = PortScanner

@@ -56,3 +56,17 @@ example("GET/scan/localhost/7070 deletes when nothing found", function (done) {
 
   kiel.send({method: "GET", resource: ["scan", "localhost", 7070]})
 })
+
+
+example("GET/scan/localhost calls port 1", function (done) {
+  var kiel = new Kiel
+
+  var server = net.createServer(function () {
+    server.close()
+    done()
+  })
+
+  server.listen(1, function () {
+    kiel.send({method: "GET", resource: ["scan", "localhost"]})
+  })
+})
