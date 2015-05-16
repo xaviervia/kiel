@@ -1,6 +1,6 @@
 {
   "name": "kiel",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Eager port / service scanner",
   "main": "kiel.js",
   "scripts": {
