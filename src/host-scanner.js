@@ -1,8 +1,9 @@
 "use strict"
 
 
-var Sydney = require("sydney")
-var OP     = require("object-pattern")
+var Sydney  = require("sydney")
+var OP      = require("object-pattern")
+var example = require("washington")
 
 
 var HostScanner = function () {}
@@ -22,6 +23,17 @@ HostScanner.prototype.callback = function (event, venue) {
     })
   }
 }
+
+
+example("GET/scan/localhost calls port 0", function (done) {
+  var hostScanner = new HostScanner
+
+  hostScanner.add(function (event) {
+    done(event.resource[2], 0)
+  })
+
+  hostScanner.send({method: "GET", resource: ["scan", "localhost"]})
+})
 
 
 module.exports = HostScanner

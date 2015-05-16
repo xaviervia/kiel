@@ -4,7 +4,7 @@
   "description": "Eager port / service scanner",
   "main": "kiel.js",
   "scripts": {
-    "test": "washington examples"
+    "test": "washington kiel"
   },
   "repository": {
     "type": "git",
