@@ -61,4 +61,19 @@ example("GET/scan/localhost calls port 0", function (done) {
 })
 
 
+example("GET/scan/localhost calls port 65536", function (done) {
+  var hostScanner = new HostScanner
+  var index = 0
+
+  hostScanner.add(function (event) {
+    if (index == 65535)
+      done(event.resource[2], 65535)
+
+    index ++
+  })
+
+  hostScanner.send({method: "GET", resource: ["scan", "localhost"]})
+})
+
+
 module.exports = HostScanner
