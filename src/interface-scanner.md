@@ -17,8 +17,8 @@ interfaceScanner.add(parsePattern({
 }), function (event) {
   console.log(
     "interface " + event.resource[1] +
-    " in address " + events.resource[2] +
-    " with data: " JSON.stringify(body)
+    " in address " + event.resource[2] +
+    " with data: + " JSON.stringify(event.body)
   )
 })
 

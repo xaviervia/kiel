@@ -17,8 +17,8 @@
 // }), function (event) {
 //   console.log(
 //     "interface " + event.resource[1] +
-//     " in address " + events.resource[2] +
-//     " with data: " JSON.stringify(body)
+//     " in address " + event.resource[2] +
+//     " with data: + " JSON.stringify(event.body)
 //   )
 // })
 //
@@ -80,7 +80,7 @@ example("GET/interface puts available interfaces", function (done) {
 
     if (remaining.length === 1 && remaining[0] === event.resource[1])
       done()
-      
+
     else
       names[event.resource[1]] = true
   })
