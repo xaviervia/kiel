@@ -74,15 +74,15 @@ example("GET/interface puts available interfaces", function (done) {
   })
 
   interfaceScanner.add(function (event) {
-    Object.keys(names)
+    var remaining = Object
+      .keys(names)
       .filter(function (name) { return ! names[name] })
-      .length === 1 ?
-        (
-          names[event.resource[1]] === false ?
-            done() :
-            done("not ok")
-        ) :
-        names[event.resource[1]] = true
+
+    if (remaining.length === 1 && remaining[0] === event.resource[1])
+      done()
+      
+    else
+      names[event.resource[1]] = true
   })
 
   interfaceScanner.send({
