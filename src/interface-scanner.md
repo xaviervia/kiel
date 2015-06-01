@@ -9,7 +9,8 @@ Get all available interfaces:
 ```javascript
 var InterfaceScanner = require("kiel/src/interface-scanner")
 var parsePattern = require("object-pattern").parse
-var interfaceScanner = new InterfaceScanner
+var Sydney = require("sydney")
+var interfaceScanner = new Sydney(new InterfaceScanner)
 
 interfaceScanner.add(parsePattern({
   method: "PUT",

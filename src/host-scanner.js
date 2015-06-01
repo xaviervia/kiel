@@ -47,14 +47,14 @@ HostScanner.prototype.callback = function (event, venue) {
   }
 }
 
-example("Matches GET/scan/localhost", function () {
+example("HostScanner #endpont matches GET/scan/localhost", function () {
   return new HostScanner().endpoint.match({
     method: "GET",
     resource: ["scan", "localhost"]
   })
 })
 
-example("GET/scan/localhost calls port 0", function (done) {
+example("HostScanner #callback calls port 0", function (done) {
   var hostScanner = new HostScanner
   var venue = {
     broadcast: function (event) {
@@ -70,7 +70,7 @@ example("GET/scan/localhost calls port 0", function (done) {
 })
 
 
-example("GET/scan/localhost calls port 65536", function (done) {
+example("HostScanner #callback calls until 65536", function (done) {
   var hostScanner = new HostScanner
   var index = 0
   var venue = {

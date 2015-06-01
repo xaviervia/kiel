@@ -9,7 +9,8 @@
 // ```javascript
 // var InterfaceScanner = require("kiel/src/interface-scanner")
 // var parsePattern = require("object-pattern").parse
-// var interfaceScanner = new InterfaceScanner
+// var Sydney = require("sydney")
+// var interfaceScanner = new Sydney(new InterfaceScanner)
 //
 // interfaceScanner.add(parsePattern({
 //   method: "PUT",
@@ -55,56 +56,58 @@ InterfaceScanner.prototype.callback = function (event, venue) {
         if (key !== "address")
           addressWithoutName[key] = address[key]
 
-      this.broadcast({
+      venue.broadcast({
         method: "PUT",
         resource: ["interface", name, address.address],
         body: addressWithoutName
       })
-    }.bind(this))
-  }.bind(this))
+    })
+  })
 }
 
 
-example("GET/interface puts available interfaces", function (done) {
-  var names = {}
-  var interfaceScanner  = new InterfaceScanner
-
-  Object.keys(os.networkInterfaces()).forEach(function (name) {
-    names[name] = false
-  })
-
-  interfaceScanner.add(function (event) {
-    var remaining = Object
-      .keys(names)
-      .filter(function (name) { return ! names[name] })
-
-    if (remaining.length === 1 && remaining[0] === event.resource[1])
-      done()
-
-    else
-      names[event.resource[1]] = true
-  })
-
-  interfaceScanner.send({
+example("InterfaceScanner #endpoint matches GET/interface", function () {
+  return new InterfaceScanner().endpoint.match({
     method: "GET",
     resource: ["interface"]
   })
 })
 
+example("InterfaceScanner #callback puts available interfaces", function (done) {
+  var names = {}
+  var interfaceScanner = new InterfaceScanner
+  var venue = {
+    broadcast: function (event) {
+      var remaining = Object
+        .keys(names)
+        .filter(function (name) { return ! names[name] })
 
-example("GET/interface puts addresses of the interfaces", function (done) {
+      if (remaining.length === 1 && remaining[0] === event.resource[1])
+        done()
+
+      else
+        names[event.resource[1]] = true
+    }
+  }
+  var event = {
+    method: "GET",
+    resource: ["interface"]
+  }
+
+  Object.keys(os.networkInterfaces()).forEach(function (name) {
+    names[name] = false
+  })
+
+  interfaceScanner.callback(event, venue)
+})
+
+
+example("InterfaceScanner #callback puts addresses of the interfaces", function (done) {
   var interfaces    = os.networkInterfaces()
   var interfaceTree = {}
   var interfaceScanner  = new InterfaceScanner
-
-  Object.keys(interfaces).forEach(function (name) {
-    interfaceTree[name] = interfaceTree[name] || {}
-    interfaces[name].forEach(function (address) {
-      interfaceTree[name][address.address] = false
-    })
-  })
-
-  interfaceScanner.add(function (event) {
+  var venue = {
+    broadcast: function (event) {
     var currentInterface = interfaceTree[event.resource[1]]
 
     Object.keys(currentInterface)
@@ -116,19 +119,40 @@ example("GET/interface puts addresses of the interfaces", function (done) {
             done("not ok")
         ) :
         currentInterface[event.resource[2]] = true
-  })
-
-  interfaceScanner.send({
+    }
+  }
+  var event = {
     method: "GET",
     resource: ["interface"]
+  }
+
+  Object.keys(interfaces).forEach(function (name) {
+    interfaceTree[name] = interfaceTree[name] || {}
+    interfaces[name].forEach(function (address) {
+      interfaceTree[name][address.address] = false
+    })
   })
+
+  interfaceScanner.callback(event, venue)
 })
 
 
-example("GET/interface puts the details of the interface", function (done) {
+example("InterfaceScanner #callback puts the details of the interface", function (done) {
   var interfaces  = os.networkInterfaces()
   var target      = { interface: Object.keys(interfaces)[0] }
   var interfaceScanner = new InterfaceScanner
+  var venue = {
+    broadcast: function (event) {
+      if (event.resource[1] === target.interface &&
+          event.resource[2] === target.address) {
+        done(JSON.stringify(event.body), JSON.stringify(target.content))
+      }
+    }
+  }
+  var event = {
+    method: "GET",
+    resource: ["interface"]
+  }
 
   target.address = interfaces[target.interface][0].address
   target.content = {}
@@ -138,17 +162,7 @@ example("GET/interface puts the details of the interface", function (done) {
       target.content[key] = interfaces[target.interface][0][key]
   })
 
-  interfaceScanner.add(function (event) {
-    if (event.resource[1] === target.interface &&
-        event.resource[2] === target.address) {
-      done(JSON.stringify(event.body), JSON.stringify(target.content))
-    }
-  })
-
-  interfaceScanner.send({
-    method: "GET",
-    resource: ["interface"]
-  })
+  interfaceScanner.callback(event, venue)
 })
 
 
