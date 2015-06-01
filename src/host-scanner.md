@@ -9,7 +9,8 @@ Scan all 65536 ports in a host:
 ```javascript
 var HostScanner = require("kiel/src/host-scanner")
 var parsePattern = require("object-pattern").parse
-var hostScanner = new HostScanner
+var Sydney = require("sydney")
+var hostScanner = new Sydney(new HostScanner)
 
 hostScanner.add(parsePattern({
   method: "GET",
