@@ -34,12 +34,9 @@
 var example = require("washington")
 var os      = require("os")
 var OP      = require("object-pattern")
-var Sydney  = require("sydney")
 
 
 var InterfaceScanner = function () {}
-
-InterfaceScanner.prototype = Object.create(Sydney.prototype)
 
 InterfaceScanner.prototype.endpoint = OP.parse({
   method: "GET",
