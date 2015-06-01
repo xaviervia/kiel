@@ -26,14 +26,11 @@
 "use strict"
 
 
-var Sydney  = require("sydney")
 var OP      = require("object-pattern")
 var example = require("washington")
 
 
 var HostScanner = function () {}
-
-HostScanner.prototype = Object.create(Sydney.prototype)
 
 HostScanner.prototype.endpoint = OP.parse({
   method: "GET",
@@ -49,30 +46,46 @@ HostScanner.prototype.callback = function (event, venue) {
   }
 }
 
+example("Matches GET/scan/localhost", function () {
+  return new HostScanner().endpoint.match({
+    method: "GET",
+    resource: ["scan", "localhost"]
+  })
+})
 
 example("GET/scan/localhost calls port 0", function (done) {
   var hostScanner = new HostScanner
+  var venue = {
+    broadcast: function (event) {
+      done(event.resource[2], 0)
+    }
+  }
+  var event = {
+    method: "GET",
+    resource: ["scan", "localhost"]
+  }
 
-  hostScanner.add(function (event) {
-    done(event.resource[2], 0)
-  })
-
-  hostScanner.send({method: "GET", resource: ["scan", "localhost"]})
+  hostScanner.callback(event, venue)
 })
 
 
 example("GET/scan/localhost calls port 65536", function (done) {
   var hostScanner = new HostScanner
   var index = 0
+  var venue = {
+    broadcast: function (event) {
+      if (index == 65535)
+        done(event.resource[2], 65535)
 
-  hostScanner.add(function (event) {
-    if (index == 65535)
-      done(event.resource[2], 65535)
+      index ++
+    }
+  }
+  var event = {
+    method: "GET",
+    resource: ["scan", "localhost"]
+  }
 
-    index ++
-  })
-
-  hostScanner.send({method: "GET", resource: ["scan", "localhost"]})
+  hostScanner.callback(event, venue)
 })
 
 
