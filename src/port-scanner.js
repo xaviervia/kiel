@@ -9,7 +9,8 @@
 // ```javascript
 // var PortScanner = require("kiel/src/port-scanner")
 // var parsePattern = require("object-pattern").parse
-// var portScanner = new PortScanner
+// var Sydney = require("sydney")
+// var portScanner = new Sydney(new PortScanner)
 //
 // portScanner.add(parsePattern({
 //   method: "PUT",
@@ -68,8 +69,19 @@ PortScanner.prototype.callback = function (event, venue) {
 }
 
 
-example("GET/scan/localhost/7070 connects to the given port", function (done) {
+example("PortScanner #endpoint matches GET/scan/localhost/7070", function () {
+  return new PortScanner().endpoint.match({
+    method: "GET",
+    resource: ["scan", "localhost", 7070]
+  })
+})
+
+
+example("PortScanner #callback connects to the given port", function (done) {
   var portScanner = new PortScanner
+  var venue = {
+    broadcast: function () {}
+  }
 
   var server = net.createServer(function () {
     server.close()
@@ -77,44 +89,51 @@ example("GET/scan/localhost/7070 connects to the given port", function (done) {
   })
 
   server.listen(7070, function () {
-    portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
+    portScanner.callback({
+      method: "GET",
+      resource: ["scan", "localhost", 7070]
+    }, venue)
   })
 })
 
 
-example("GET/scan/localhost/7070 puts when it is found", function (done) {
+example("PortScanner #callback puts when it is found", function (done) {
   var portScanner = new PortScanner
-
-  portScanner.add(
-    OP.parse({
-      method: "PUT",
-      resource: ["scan", "localhost", 7070]
-    }),
-    function () { done() }
-  )
+  var venue = {
+    broadcast: function (event) {
+      if (OP.parse({
+        method: "PUT",
+        resource: ["scan", "localhost", 7070]
+      })) done()
+    }
+  }
 
   var server = net.createServer(function () {
     server.close()
   })
 
   server.listen(7070, function () {
-    portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
+    portScanner.callback({
+      method: "GET",
+      resource: ["scan", "localhost", 7070]
+    }, venue)
   })
 })
 
 
-example("GET/scan/localhost/7070 deletes when nothing found", function (done) {
+example("PortScanner #callback deletes when nothing found", function (done) {
   var portScanner = new PortScanner
-
-  portScanner.add(
-    OP.parse({
+  var venue = { broadcast: function (event) {
+    if (OP.parse({
       method: "DELETE",
       resource: ["scan", "localhost", 7070]
-    }),
-    function () { done() }
-  )
+    })) done()
+  }}
 
-  portScanner.send({method: "GET", resource: ["scan", "localhost", 7070]})
+  portScanner.callback({
+    method: "GET",
+    resource: ["scan", "localhost", 7070]
+  }, venue)
 })
 
 
