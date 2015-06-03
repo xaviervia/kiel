@@ -88,3 +88,6 @@ example("WildScanner.AdaptToScan calls GET/scan/<resource[2]>", function (done) 
 
   adaptToScan.callback(event, venue)
 })
+
+
+module.exports = WildScanner
