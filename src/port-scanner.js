@@ -34,15 +34,12 @@
 "use strict"
 
 
-var Sydney  = require("sydney")
 var OP      = require("object-pattern")
 var net     = require("net")
 var example = require("washington")
 
 
 var PortScanner = function () {}
-
-PortScanner.prototype = Object.create(Sydney.prototype)
 
 PortScanner.prototype.endpoint = OP.parse({
   method: "GET",
