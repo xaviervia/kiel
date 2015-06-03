@@ -7,6 +7,9 @@
     "doc": "locco '--source={kiel.js,src/**/*.js}' --adapter=markdown --adapter-readme=kiel.js",
     "test": "washington kiel"
   },
+  "bin": {
+    "kiel": "./bin/kiel"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xaviervia/kiel"
@@ -25,13 +28,13 @@
   },
   "homepage": "https://github.com/xaviervia/kiel",
   "devDependencies": {
-    "@jstp/logger": "0.0.1",
     "locco": "^1.0.2",
     "locco-markdown": "0.0.2"
   },
   "dependencies": {
+    "@jstp/logger": "0.0.1",
     "object-pattern": "0.3.0",
-    "sydney": "0.3.0",
+    "sydney": "0.5.0",
     "washington": "0.11.2"
   }
 }

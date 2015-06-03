@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var Kiel = require("../kiel")
+var JSTPLogger = require("@jstp/logger")
+
+var kiel = new Kiel
+
+kiel.add(new JSTPLogger)
+
+kiel.send({
+  method: "GET",
+  resource: process.argv[2].split("/")
+})
