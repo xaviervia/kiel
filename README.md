@@ -20,6 +20,7 @@ Too α for that, refer to the specific modules:
 - [PortScanner](src/port-scanner.md)
 - [HostScanner](src/host-scanner.md)
 - [InterfaceScanner](src/interface-scanner.md)
+- [WildScanner](src/wild-scanner.md)
 
 Testing
 -------

@@ -38,6 +38,7 @@ HostScanner.prototype.endpoint = OP.parse({
   resource: ["scan", "*"]
 })
 
+
 HostScanner.prototype.callback = function (event, venue) {
   for (var i = 0; i < 65536; i ++) {
     venue.broadcast({
@@ -47,12 +48,14 @@ HostScanner.prototype.callback = function (event, venue) {
   }
 }
 
+
 example("HostScanner #endpont matches GET/scan/localhost", function () {
   return new HostScanner().endpoint.match({
     method: "GET",
     resource: ["scan", "localhost"]
   })
 })
+
 
 example("HostScanner #callback calls port 0", function (done) {
   var hostScanner = new HostScanner

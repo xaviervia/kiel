@@ -56,21 +56,27 @@ InterfaceScanner.prototype.callback = function (event, venue) {
       venue.broadcast({
         method: "PUT",
         resource: ["interface", name, address.address],
-        body: addressWithoutName
+        body: addressWithoutName,
+        from: event.from
       })
     })
   })
 }
 
 
-example("InterfaceScanner #endpoint matches GET/interface", function () {
+example(
+  "InterfaceScanner #endpoint matches GET/interface",
+  function () {
   return new InterfaceScanner().endpoint.match({
     method: "GET",
     resource: ["interface"]
   })
 })
 
-example("InterfaceScanner #callback puts available interfaces", function (done) {
+
+example(
+  "InterfaceScanner #callback puts available interfaces",
+  function (done) {
   var names = {}
   var interfaceScanner = new InterfaceScanner
   var venue = {
@@ -99,7 +105,45 @@ example("InterfaceScanner #callback puts available interfaces", function (done) 
 })
 
 
-example("InterfaceScanner #callback puts addresses of the interfaces", function (done) {
+example(
+  "InterfaceScanner #callback propagates @from header",
+  function (done) {
+  var names = {}
+  var from = { name: "from" }
+  var interfaceScanner = new InterfaceScanner
+  var venue = {
+    broadcast: function (event) {
+      var remaining = Object
+        .keys(names)
+        .filter(function (name) { return ! names[name] })
+
+      if (
+        remaining.length === 1 &&
+        remaining[0] === event.resource[1] &&
+        event.from === from)
+        done()
+
+      else
+        names[event.resource[1]] = true
+    }
+  }
+  var event = {
+    method: "GET",
+    resource: ["interface"],
+    from: from
+  }
+
+  Object.keys(os.networkInterfaces()).forEach(function (name) {
+    names[name] = false
+  })
+
+  interfaceScanner.callback(event, venue)
+})
+
+
+example(
+  "InterfaceScanner #callback puts addresses of the interfaces",
+  function (done) {
   var interfaces    = os.networkInterfaces()
   var interfaceTree = {}
   var interfaceScanner  = new InterfaceScanner
@@ -134,7 +178,9 @@ example("InterfaceScanner #callback puts addresses of the interfaces", function 
 })
 
 
-example("InterfaceScanner #callback puts the details of the interface", function (done) {
+example(
+  "InterfaceScanner #callback puts the details of the interface",
+  function (done) {
   var interfaces  = os.networkInterfaces()
   var target      = { interface: Object.keys(interfaces)[0] }
   var interfaceScanner = new InterfaceScanner

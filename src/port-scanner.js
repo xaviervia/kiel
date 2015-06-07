@@ -41,10 +41,12 @@ var example = require("washington")
 
 var PortScanner = function () {}
 
+
 PortScanner.prototype.endpoint = OP.parse({
   method: "GET",
   resource: ["scan", "*", "*"]
 })
+
 
 PortScanner.prototype.callback = function (event, venue) {
   var port = parseInt(event.resource[2], 10)
